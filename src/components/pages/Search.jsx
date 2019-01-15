@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./style.css";
 import Axios from "axios";
+import API from "../utils/API";
 
 class Search extends Component {
   state = {
