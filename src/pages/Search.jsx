@@ -1,38 +1,61 @@
 import React, { Component } from "react";
-import "./style.css";
-import Axios from "axios";
 import API from "../utils/API";
+import Container from "../components/Container";
+import SearchForm from "../components/SearchForm";
+import SearchResults from "../components/SearchResults";
+import Alert from "../components/Alert";
 
 class Search extends Component {
   state = {
-    breed: ""
+    search: "",
+    breeds: [],
+    results: [],
+    error: ""
   };
 
+  // When the component mouonts, get a list of all values avaliable base breeds
+  // and update this.state.breeds
+  componentDidMount() {
+    API.getBaseBreedsList()
+      .then(res => this.setState({ breeds: res.data.message }))
+      .catch(err => console.log(err));
+  }
+
+  // Handle input change when someone types into form
   handleInputChange = event => {
-    const breed = event.target.breed;
-    this.setState({ breed });
+    this.setState({ search: event.target.value });
   };
 
-  handleSubmit = event => {
-    Axios.get(`https://dog.ceo/api/breed/${this.state.breed}/images`);
+  handleFormSubmit = event => {
+    event.preventDefault();
+    API.getDogsOfBreed(this.state.search)
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({ results: res.data.message, error: "" });
+      })
+      .catch(err => this.setState({ error: err.message }));
   };
 
   render() {
     return (
       <div>
-        <p>Please Type the Name of the Breed you Would Like to Search</p>
-        <form className="form">
-          <input
-            value={this.state.breed}
-            name="breed"
-            onChange={this.handleInputChange}
-            type="text"
-            placeholder="Breed Name"
+        <Container style={{ minHeight: "80%" }}>
+          <h1 className="text-center"> Search By Breed!</h1>
+          <Alert
+            type="danger"
+            style={{ opacity: this.state.error ? 1 : 0, marginBottom: 10 }}
+          >
+            >{this.state.error}
+          </Alert>
+          <SearchForm
+            handleFormSubmit={this.handleFormSubmit}
+            handleInputChange={this.handleInputChange}
+            breeds={this.state.breeds}
           />
-          <button className="btn btn-lg btn-primary" onClick={handleSubmit}>
-            Submit
-          </button>
-        </form>
+          <SearchResults results={this.state.results} />
+        </Container>
       </div>
     );
   }

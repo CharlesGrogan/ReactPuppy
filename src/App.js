@@ -1,24 +1,27 @@
-import React, { Component } from "react";
-import "./App.css";
+import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import NavTabs from "./components/NavTabs/NavTabs";
-import About from "./components/About/About";
-import Discover from "./components/Discover/Discover";
-import Search from "./components/Search/Search";
+import About from "../src/pages/About";
+import Discover from "../src/pages/Discover";
+import Search from "../src/pages/Search";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Wrapper from "./components/Wrapper";
 
-class App extends Component {
-  render() {
-    return (
-      <Router>
-        <div>
-          <NavTabs />
+function App() {
+  return (
+    <Router>
+      <div>
+        <Navbar />
+        <Wrapper>
+          <Route exact path="/" component={About} />
           <Route exact path="/about" component={About} />
           <Route exact path="/discover" component={Discover} />
           <Route exact path="/search" component={Search} />
-        </div>
-      </Router>
-    );
-  }
+        </Wrapper>
+        <Footer />
+      </div>
+    </Router>
+  );
 }
 
 export default App;

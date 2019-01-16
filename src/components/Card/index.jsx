@@ -1,18 +1,18 @@
 import React from "react";
-import CardBtn from "./CardBtn";
-import "style.css";
+import CardBtn from "../CardBtn";
+import "./style.css";
 
 function Card(props) {
   return (
     <div
       className="card"
-      stlye={{
+      style={{
         backgroundImage: props.image ? `url(${props.image})` : "none"
       }}
     >
-      {!props.image && (
+      {!props.image &&
         <i className="fa fa-spinner fa-spin" aria-hidden="true" />
-      )}
+      }}
       <CardBtn
         style={{ opacity: props.image ? 1 : 0 }}
         onClick={props.handleBtnClick}
